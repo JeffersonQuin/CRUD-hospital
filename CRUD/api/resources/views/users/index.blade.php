@@ -3,84 +3,107 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Usuarios - Laravel</title>
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>Registro de Usuarios</title>
+    <!-- Tailwind CSS -->
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/3/3b/Laptop_Icon_2.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-bold text-center mb-6">Registrar Usuario</h1>
+<body class="bg-gradient-to-r from-blue-400 to-cyan-400">
 
-        <!-- Mensajes de éxito o error -->
-        @if(session('success'))
-            <div class="bg-green-500 text-white p-4 mb-6 rounded">
-                {{ session('success') }}
-            </div>
-        @elseif(session('error'))
-            <div class="bg-red-500 text-white p-4 mb-6 rounded">
-                {{ session('error') }}
-            </div>
-        @endif
+    <div class="container mx-auto p-6">
+        <!-- Título -->
+        <h1 class="text-3xl font-bold text-center mb-6 text-white">Registro de Usuarios</h1>
 
         <!-- Formulario de Registro -->
-        <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow">
-            <form action="{{ route('users.store') }}" method="POST">
-                @csrf <!-- Agrega esto para proteger el formulario contra ataques CSRF -->
-
-                <input type="text" name="name" placeholder="Nombre" required>
-                <input type="text" name="lastname" placeholder="Apellido" required>
-                <input type="text" name="phone" placeholder="Teléfono" required>
-                <input type="text" name="address" placeholder="Dirección" required>
-                <input type="email" name="email" placeholder="Correo Electrónico" required>
-                <input type="password" name="password" placeholder="Contraseña" required>
-                <input type="text" name="rol_id" placeholder="ID del Rol" required>
-                <input type="text" name="specialty_id" placeholder="ID de Especialidad" required>
-
-                <button type="submit">Crear Usuario</button>
+        <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg mb-6 bg-gradient-to-r from-blue-300 to-cyan-300">
+            <form action="{{ route('users.store') }}" method="POST" class="space-y-4">
+                @csrf
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Primera fila -->
+                    <input type="text" name="name" placeholder="Nombre" required class="border p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <input type="text" name="lastname" placeholder="Apellido" required class="border p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <!-- Segunda fila -->
+                    <input type="text" name="phone" placeholder="Teléfono" required class="border p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <input type="text" name="address" placeholder="Dirección" required class="border p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <!-- Tercera fila -->
+                    <input type="email" name="email" placeholder="Correo Electrónico" required class="border p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <input type="password" name="password" placeholder="Contraseña" required class="border p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <!-- Cuarta fila - Rol ID -->
+                    <select name="rol_id" required class="border p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-600">
+                        <option value="" disabled selected>Seleccione un Rol</option>
+                        <option value="1">Administrador</option>
+                        <option value="2">Usuario</option>
+                    </select>
+                    <!-- Cuarta fila - Especialidad ID -->
+                    <select name="specialty_id" required class="border p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-600">
+                        <option value="" disabled selected>Seleccione una Especialidad</option>
+                        <option value="1">Cardiología</option>
+                        <option value="2">Neurología</option>
+                        <option value="3">Pediatría</option>
+                    </select>
+                </div>
+                <button type="submit" class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-2 px-4 rounded hover:from-blue-600 hover:to-cyan-600">Registrar Persona</button>
             </form>
         </div>
 
-        <!-- Lista de Usuarios -->
-        <div class="mt-8">
-            <h2 class="text-xl font-semibold text-center mb-4">Lista de Usuarios</h2>
-            <div class="overflow-hidden bg-white rounded-lg shadow-md">
-                <table class="min-w-full leading-normal">
-                    <thead>
-                        <tr>
-                            <th class="px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-600 uppercase">ID</th>
-                            <th class="px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-600 uppercase">Nombre</th>
-                            <th class="px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-600 uppercase">Correo</th>
-                            <th class="px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-600 uppercase">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($users as $user)
-                            <tr>
-                                <td class="px-5 py-2 border-b border-gray-200 text-sm">{{ $user->id }}</td>
-                                <td class="px-5 py-2 border-b border-gray-200 text-sm">{{ $user->name }} {{ $user->lastname }}</td>
-                                <td class="px-5 py-2 border-b border-gray-200 text-sm">{{ $user->email }}</td>
-                                <td class="px-5 py-2 border-b border-gray-200 text-sm">
-                                    <!-- Enlace a Ver detalles -->
-                                    <a href="{{ route('users.show', $user->id) }}" class="text-blue-600 hover:text-blue-800">Ver</a> |
-                                    
-                                    <!-- Enlace a Editar -->
-                                    <a href="{{ route('users.edit', $user->id) }}" class="text-yellow-600 hover:text-yellow-800">Editar</a> |
-                                    
-                                    <!-- Formulario para Eliminar -->
-                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-800">Eliminar</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+        <!-- Tabla de Usuarios -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden bg-gradient-to-r from-blue-300 to-cyan-300">
+            <table class="min-w-full leading-normal">
+                <thead>
+                    <tr>
+                        <th class="px-5 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-left text-xs font-semibold text-white uppercase">#</th>
+                        <th class="px-5 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-left text-xs font-semibold text-white uppercase">Nombre</th>
+                        <th class="px-5 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-left text-xs font-semibold text-white uppercase">Apellido</th>
+                        <th class="px-5 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-left text-xs font-semibold text-white uppercase">Teléfono</th>
+                        <th class="px-5 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-left text-xs font-semibold text-white uppercase">Dirección</th>
+                        <th class="px-5 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-left text-xs font-semibold text-white uppercase">Correo</th>
+                        <th class="px-5 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-left text-xs font-semibold text-white uppercase">Rol</th>
+                        <th class="px-5 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-left text-xs font-semibold text-white uppercase">Especialidad</th>
+                        <th class="px-5 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-left text-xs font-semibold text-white uppercase">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($users as $user)
+                    <tr class="hover:bg-gradient-to-r from-blue-300 to-cyan-300">
+                        <td class="px-5 py-2 border-b border-gray-200 text-sm text-gray-800">{{ $loop->iteration }}</td>
+                        <td class="px-5 py-2 border-b border-gray-200 text-sm text-gray-800">{{ $user->name }}</td>
+                        <td class="px-5 py-2 border-b border-gray-200 text-sm text-gray-800">{{ $user->lastname }}</td>
+                        <td class="px-5 py-2 border-b border-gray-200 text-sm text-gray-800">{{ $user->phone }}</td>
+                        <td class="px-5 py-2 border-b border-gray-200 text-sm text-gray-800">{{ $user->address }}</td>
+                        <td class="px-5 py-2 border-b border-gray-200 text-sm text-gray-800">{{ $user->email }}</td>
+                        <td class="px-5 py-2 border-b border-gray-200 text-sm text-gray-800">
+                            {{ $user->rol_id == 1 ? 'Administrador' : 'Usuario' }}
+                        </td>
+                        <td class="px-5 py-2 border-b border-gray-200 text-sm text-gray-800">
+                            @if($user->specialty_id == 1)
+                                Cardiología
+                            @elseif($user->specialty_id == 2)
+                                Neurología
+                            @elseif($user->specialty_id == 3)
+                                Pediatría
+                            @else
+                                N/A
+                            @endif
+                        </td>
+                        <td class="px-5 py-2 border-b border-gray-200 text-sm flex space-x-2">
+                            <!-- Botones de Acción -->
+                            <a href="{{ route('users.edit', $user->id) }}" class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-1 px-2 rounded hover:from-yellow-600 hover:to-yellow-700">✏️</a>
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" 
+                                    onclick="return confirm('¿Está seguro de que desea eliminar este registro?');"
+                                    class="bg-gradient-to-r from-red-500 to-red-600 text-white py-1 px-2 rounded hover:from-red-600 hover:to-red-700">
+                                    🗑️
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
+
 </body>
 </html>
