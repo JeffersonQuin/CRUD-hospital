@@ -5,7 +5,7 @@ const UserDetail = ({ userId }) => {
 
   useEffect(() => {
     // Llamada a la API para obtener un usuario específico
-    fetch(`http://localhost/api/users/${userId}`)
+    fetch(`http://localhost/users/${userId}`)
       .then(response => response.json())
       .then(data => setUser(data))
       .catch(error => console.error('Error fetching user:', error));

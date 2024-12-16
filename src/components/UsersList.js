@@ -11,7 +11,11 @@ const UsersList = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/users'); // Asegúrate de que la URL sea correcta
+      const response = await axios.get('http://127.0.0.1:8000/users', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Agrega el token de autenticación si es necesario
+        },
+      });
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users', error);
@@ -20,7 +24,11 @@ const UsersList = () => {
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/users/${id}`);
+      await axios.delete(`http://127.0.0.1:8000/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Token de autenticación
+        },
+      });
       fetchUsers();  // Vuelve a cargar los usuarios después de eliminar
     } catch (error) {
       console.error('Error deleting user', error);
@@ -61,7 +69,7 @@ const EditUserForm = ({ user, onFinishEdit }) => {
     phone: user.phone,
     address: user.address,
     mail: user.mail,
-    password: '',
+    password: '', // No es necesario si no lo quieres actualizar
     rol_id: user.rol_id,
     specialty_id: user.specialty_id,
   });
@@ -74,8 +82,17 @@ const EditUserForm = ({ user, onFinishEdit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8000/api/users/${user.id}`, formData);
-      onFinishEdit(); // Finaliza la edición y vuelve a cargar los usuarios
+      const response = await axios.put(`http://127.0.0.1:8000/users/${user.id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Autenticación
+        },
+      });
+
+      if (response.status === 200) {
+        onFinishEdit(); // Finaliza la edición y vuelve a cargar los usuarios
+      } else {
+        alert('Hubo un error al actualizar el usuario');
+      }
     } catch (error) {
       console.error('Error updating user', error);
     }
